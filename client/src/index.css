@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+a.active hr {
+    display: block;
+}
+
+@media screen and (max-width: 640px) {
+    nav a {
+        padding: 20px;
+    }
+
+    #navbar-mobile-navigation a.active {
+        color: white;
+        background-color: black;
+    }
+}
