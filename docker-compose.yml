@@ -1,0 +1,45 @@
+name: e-commerce
+
+services:
+  mongo:
+    image: mongo:7.0.12
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - e-commerce
+  api:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - 1313:1313
+    networks:
+      - e-commerce
+    depends_on:
+      - mongo
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file: ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - 5173:5173
+    networks:
+      - e-commerce
+    depends_on:
+      - api
+
+volumes:
+  mongo_data:
+networks:
+  e-commerce:
+    driver: bridge
